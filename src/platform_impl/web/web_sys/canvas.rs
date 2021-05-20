@@ -3,9 +3,7 @@ use super::event_handle::EventListenerHandle;
 use super::media_query_handle::MediaQueryListHandle;
 use crate::dpi::{LogicalPosition, PhysicalPosition, PhysicalSize};
 use crate::error::OsError as RootOE;
-use crate::event::{
-    ModifiersState, MouseButton, MouseScrollDelta, PointerType, ScanCode, VirtualKeyCode,
-};
+use crate::event::{ModifiersState, MouseButton, MouseScrollDelta, ScanCode, VirtualKeyCode};
 use crate::platform_impl::{OsError, PlatformSpecificWindowBuilderAttributes};
 
 use std::cell::RefCell;
@@ -250,7 +248,7 @@ impl Canvas {
 
     pub fn on_pointer_move<F>(&mut self, handler: F)
     where
-        F: 'static + FnMut(i32, PhysicalPosition<f64>, PointerType),
+        F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
         match &mut self.mouse_state {
             MouseState::HasPointerEvent(h) => h.on_pointer_move(&self.common, handler),
@@ -260,7 +258,7 @@ impl Canvas {
 
     pub fn on_pointer_down<F>(&mut self, handler: F)
     where
-        F: 'static + FnMut(i32, PhysicalPosition<f64>, PointerType),
+        F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
         match &mut self.mouse_state {
             MouseState::HasPointerEvent(h) => h.on_pointer_down(&self.common, handler),
@@ -270,7 +268,7 @@ impl Canvas {
 
     pub fn on_pointer_up<F>(&mut self, handler: F)
     where
-        F: 'static + FnMut(i32, PhysicalPosition<f64>, PointerType),
+        F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
         match &mut self.mouse_state {
             MouseState::HasPointerEvent(h) => h.on_pointer_up(&self.common, handler),
@@ -280,7 +278,7 @@ impl Canvas {
 
     pub fn on_pointer_cancel<F>(&mut self, handler: F)
     where
-        F: 'static + FnMut(i32, PhysicalPosition<f64>, PointerType),
+        F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
         match &mut self.mouse_state {
             MouseState::HasPointerEvent(h) => h.on_pointer_cancel(&self.common, handler),
