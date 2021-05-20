@@ -111,7 +111,7 @@ impl PointerHandler {
 
     pub fn on_pointer_move<F>(&mut self, canvas_common: &super::Common, mut handler: F)
     where
-        F: 'static + FnMut(i32, PhysicalPosition<f64>, PointerType),
+        F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
         self.on_pointer_move = Some(canvas_common.add_event(
             "pointermove",
@@ -122,12 +122,6 @@ impl PointerHandler {
                         x: event.offset_x() as f64,
                         y: event.offset_y() as f64,
                     },
-                    match event.pointer_type().as_str() {
-                        "mouse" => PointerType::Mouse,
-                        "pen" => PointerType::Pen,
-                        "touch" => PointerType::Touch,
-                        _ => PointerType::Unknown,
-                    },
                 );
             },
         ));
@@ -137,6 +131,7 @@ impl PointerHandler {
     where
         F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
+        let canvas = canvas_common.raw.clone();
         self.on_pointer_down = Some(canvas_common.add_event(
             "pointerdown",
             move |event: PointerEvent| {
@@ -147,6 +142,9 @@ impl PointerHandler {
                         y: event.offset_y() as f64,
                     },
                 );
+                canvas
+                    .set_pointer_capture(event.pointer_id())
+                    .expect("Failed to set pointer capture");
             },
         ));
     }
