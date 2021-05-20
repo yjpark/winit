@@ -1,3 +1,40 @@
+# Unreleased
+
+- Added `Window::focus_window`to bring the window to the front and set input focus.
+- On Web, added support for `Event::Touch`.
+
+# 0.25.0 (2021-05-15)
+
+- **Breaking:** On macOS, replace `WindowBuilderExtMacOS::with_activation_policy` with `EventLoopExtMacOS::set_activation_policy`
+- On macOS, wait with activating the application until the application has initialized.
+- On macOS, fix creating new windows when the application has a main menu.
+- On Windows, fix fractional deltas for mouse wheel device events.
+- On macOS, fix segmentation fault after dropping the main window.
+- On Android, `InputEvent::KeyEvent` is partially implemented providing the key scancode.
+- Added `is_maximized` method to `Window`.
+- On Windows, fix bug where clicking the decoration bar would make the cursor blink.
+- On Windows, fix bug causing newly created windows to erroneously display the "wait" (spinning) cursor.
+- On macOS, wake up the event loop immediately when a redraw is requested.
+- On Windows, change the default window size (1024x768) to match the default on other desktop platforms (800x600).
+- On Windows, fix bug causing mouse capture to not be released.
+- On Windows, fix fullscreen not preserving minimized/maximized state.
+- On Android, unimplemented events are marked as unhandled on the native event loop.
+- On Windows, added `WindowBuilderExtWindows::with_menu` to set a custom menu at window creation time.
+- On Android, bump `ndk` and `ndk-glue` to 0.3: use predefined constants for event `ident`.
+- On macOS, fix objects captured by the event loop closure not being dropped on panic.
+- On Windows, fixed `WindowEvent::ThemeChanged` not properly firing and fixed `Window::theme` returning the wrong theme.
+- On Web, added support for `DeviceEvent::MouseMotion` to listen for relative mouse movements.
+- Added `WindowBuilder::with_position` to allow setting the position of a `Window` on creation. Supported on Windows, macOS and X11.
+- Added `Window::drag_window`. Implemented on Windows, macOS, X11 and Wayland.
+- On X11, bump `mio` to 0.7.
+- On Windows, added `WindowBuilderExtWindows::with_owner_window` to allow creating popup windows.
+- On Windows, added `WindowExtWindows::set_enable` to allow creating modal popup windows.
+- On macOS, emit `RedrawRequested` events immediately while the window is being resized.
+- Implement `Default`, `Hash`, and `Eq` for `LogicalPosition`, `PhysicalPosition`, `LogicalSize`, and `PhysicalSize`.
+- On macOS, initialize the Menu Bar with minimal defaults. (Can be prevented using `enable_default_menu_creation`)
+- On macOS, change the default behavior for first click when the window was unfocused. Now the window becomes focused and then emits a `MouseInput` event on a "first mouse click".
+- Implement mint (math interoperability standard types) conversions (under feature flag `mint`).
+
 # 0.24.0 (2020-12-09)
 
 - On Windows, fix applications not exiting gracefully due to thread_event_target_callback accessing corrupted memory.
@@ -57,7 +94,7 @@
 - On macOS, fix inverted horizontal scroll.
 - **Breaking:** `current_monitor` now returns `Option<MonitorHandle>`.
 - **Breaking:** `primary_monitor` now returns `Option<MonitorHandle>`.
-- On macOS, updated core-* dependencies and cocoa.
+- On macOS, updated core-\* dependencies and cocoa.
 - Bump `parking_lot` to 0.11
 - On Android, bump `ndk`, `ndk-sys` and `ndk-glue` to 0.2. Checkout the new ndk-glue main proc attribute.
 - On iOS, fixed starting the app in landscape where the view still had portrait dimensions.
@@ -99,7 +136,7 @@
 - On Windows, fix `WindowBuilder::with_maximized` being ignored.
 - On Android, minimal platform support.
 - On iOS, touch positions are now properly converted to physical pixels.
-- On macOS, updated core-* dependencies and cocoa
+- On macOS, updated core-\* dependencies and cocoa
 
 # 0.22.1 (2020-04-16)
 
@@ -152,13 +189,13 @@
 
 - On X11, fix `ModifiersChanged` emitting incorrect modifier change events
 - **Breaking**: Overhaul how Winit handles DPI:
-  + Window functions and events now return `PhysicalSize` instead of `LogicalSize`.
-  + Functions that take `Size` or `Position` types can now take either `Logical` or `Physical` types.
-  + `hidpi_factor` has been renamed to `scale_factor`.
-  + `HiDpiFactorChanged` has been renamed to `ScaleFactorChanged`, and lets you control how the OS
+  - Window functions and events now return `PhysicalSize` instead of `LogicalSize`.
+  - Functions that take `Size` or `Position` types can now take either `Logical` or `Physical` types.
+  - `hidpi_factor` has been renamed to `scale_factor`.
+  - `HiDpiFactorChanged` has been renamed to `ScaleFactorChanged`, and lets you control how the OS
     resizes the window in response to the change.
-  + On X11, deprecate `WINIT_HIDPI_FACTOR` environment variable in favor of `WINIT_X11_SCALE_FACTOR`.
-  + `Size` and `Position` types are now generic over their exact pixel type.
+  - On X11, deprecate `WINIT_HIDPI_FACTOR` environment variable in favor of `WINIT_X11_SCALE_FACTOR`.
+  - `Size` and `Position` types are now generic over their exact pixel type.
 
 # 0.20.0 Alpha 6 (2020-01-03)
 
@@ -263,7 +300,7 @@
 - `Window::set_fullscreen` now takes `Option<Fullscreen>` where `Fullscreen`
   consists of `Fullscreen::Exclusive(VideoMode)` and
   `Fullscreen::Borderless(MonitorHandle)` variants.
-    - Adds support for exclusive fullscreen mode.
+  - Adds support for exclusive fullscreen mode.
 - On iOS, add support for hiding the home indicator.
 - On iOS, add support for deferring system gestures.
 - On iOS, fix a crash that occurred while acquiring a monitor's name.
@@ -287,7 +324,7 @@
 
 - On X11, non-resizable windows now have maximize explicitly disabled.
 - On Windows, support paths longer than MAX_PATH (260 characters) in `WindowEvent::DroppedFile`
-and `WindowEvent::HoveredFile`.
+  and `WindowEvent::HoveredFile`.
 - On Mac, implement `DeviceEvent::Button`.
 - Change `Event::Suspended(true / false)` to `Event::Suspended` and `Event::Resumed`.
 - On X11, fix sanity check which checks that a monitor's reported width and height (in millimeters) are non-zero when calculating the DPI factor.
@@ -462,7 +499,7 @@ and `WindowEvent::HoveredFile`.
 # Version 0.16.1 (2018-07-02)
 
 - Added logging through `log`. Logging will become more extensive over time.
-- On X11 and Windows, the window's DPI factor is guessed before creating the window. This *greatly* cuts back on unsightly auto-resizing that would occur immediately after window creation.
+- On X11 and Windows, the window's DPI factor is guessed before creating the window. This _greatly_ cuts back on unsightly auto-resizing that would occur immediately after window creation.
 - Fixed X11 backend compilation for environments where `c_char` is unsigned.
 
 # Version 0.16.0 (2018-06-25)
@@ -612,7 +649,7 @@ and `WindowEvent::HoveredFile`.
 
 # Version 0.10.1 (2018-02-05)
 
-*Yanked*
+_Yanked_
 
 # Version 0.10.0 (2017-12-27)
 
@@ -629,20 +666,20 @@ and `WindowEvent::HoveredFile`.
 - Added event `WindowEvent::HiDPIFactorChanged`.
 - Added method `MonitorId::get_hidpi_factor`.
 - Deprecated `get_inner_size_pixels` and `get_inner_size_points` methods of `Window` in favor of
-`get_inner_size`.
+  `get_inner_size`.
 - **Breaking:** `EventsLoop` is `!Send` and `!Sync` because of platform-dependant constraints,
   but `Window`, `WindowId`, `DeviceId` and `MonitorId` guaranteed to be `Send`.
 - `MonitorId::get_position` now returns `(i32, i32)` instead of `(u32, u32)`.
 - Rewrite of the wayland backend to use wayland-client-0.11
 - Support for dead keys on wayland for keyboard utf8 input
 - Monitor enumeration on Windows is now implemented using `EnumDisplayMonitors` instead of
-`EnumDisplayDevices`. This changes the value returned by `MonitorId::get_name()`.
+  `EnumDisplayDevices`. This changes the value returned by `MonitorId::get_name()`.
 - On Windows added `MonitorIdExt::hmonitor` method
 - Impl `Clone` for `EventsLoopProxy`
 - `EventsLoop::get_primary_monitor()` on X11 will fallback to any available monitor if no primary is found
 - Support for touch event on wayland
 - `WindowEvent`s `MouseMoved`, `MouseEntered`, and `MouseLeft` have been renamed to
-`CursorMoved`, `CursorEntered`, and `CursorLeft`.
+  `CursorMoved`, `CursorEntered`, and `CursorLeft`.
 - New `DeviceEvent`s added, `MouseMotion` and `MouseWheel`.
 - Send `CursorMoved` event after `CursorEntered` and `Focused` events.
 - Add support for `ModifiersState`, `MouseMove`, `MouseInput`, `MouseMotion` for emscripten backend.
