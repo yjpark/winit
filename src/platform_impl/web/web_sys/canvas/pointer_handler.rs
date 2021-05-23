@@ -11,10 +11,10 @@ pub(super) struct PointerHandler {
     on_cursor_move: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
     on_pointer_press: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
     on_pointer_release: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
-    on_pointer_move: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
-    on_pointer_down: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
-    on_pointer_up: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
-    on_pointer_cancel: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
+    on_touch_move: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
+    on_touch_down: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
+    on_touch_up: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
+    on_touch_cancel: Option<EventListenerHandle<dyn FnMut(PointerEvent)>>,
 }
 
 impl PointerHandler {
@@ -25,10 +25,10 @@ impl PointerHandler {
             on_cursor_move: None,
             on_pointer_press: None,
             on_pointer_release: None,
-            on_pointer_move: None,
-            on_pointer_down: None,
-            on_pointer_up: None,
-            on_pointer_cancel: None,
+            on_touch_move: None,
+            on_touch_down: None,
+            on_touch_up: None,
+            on_touch_cancel: None,
         }
     }
 
@@ -113,9 +113,13 @@ impl PointerHandler {
     where
         F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
-        self.on_pointer_move = Some(canvas_common.add_event(
+        self.on_touch_move = Some(canvas_common.add_event(
             "pointermove",
             move |event: PointerEvent| {
+                if event.pointer_type() != "touch" {
+                    return;
+                }
+
                 handler(
                     event.pointer_id(),
                     PhysicalPosition {
@@ -131,10 +135,13 @@ impl PointerHandler {
     where
         F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
-        let canvas = canvas_common.raw.clone();
-        self.on_pointer_down = Some(canvas_common.add_event(
+        self.on_touch_down = Some(canvas_common.add_event(
             "pointerdown",
             move |event: PointerEvent| {
+                if event.pointer_type() != "touch" {
+                    return;
+                }
+
                 handler(
                     event.pointer_id(),
                     PhysicalPosition {
@@ -142,9 +149,6 @@ impl PointerHandler {
                         y: event.offset_y() as f64,
                     },
                 );
-                canvas
-                    .set_pointer_capture(event.pointer_id())
-                    .expect("Failed to set pointer capture");
             },
         ));
     }
@@ -153,9 +157,13 @@ impl PointerHandler {
     where
         F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
-        self.on_pointer_up = Some(canvas_common.add_event(
+        self.on_touch_up = Some(canvas_common.add_event(
             "pointerup",
             move |event: PointerEvent| {
+                if event.pointer_type() != "touch" {
+                    return;
+                }
+
                 handler(
                     event.pointer_id(),
                     PhysicalPosition {
@@ -171,9 +179,13 @@ impl PointerHandler {
     where
         F: 'static + FnMut(i32, PhysicalPosition<f64>),
     {
-        self.on_pointer_cancel = Some(canvas_common.add_event(
+        self.on_touch_cancel = Some(canvas_common.add_event(
             "pointercancel",
             move |event: PointerEvent| {
+                if event.pointer_type() != "touch" {
+                    return;
+                }
+
                 handler(
                     event.pointer_id(),
                     PhysicalPosition {
@@ -191,9 +203,9 @@ impl PointerHandler {
         self.on_cursor_move = None;
         self.on_pointer_press = None;
         self.on_pointer_release = None;
-        self.on_pointer_move = None;
-        self.on_pointer_down = None;
-        self.on_pointer_up = None;
-        self.on_pointer_cancel = None;
+        self.on_touch_move = None;
+        self.on_touch_down = None;
+        self.on_touch_up = None;
+        self.on_touch_cancel = None;
     }
 }
